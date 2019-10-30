@@ -17,7 +17,7 @@ export default {
     }
   },
 
-  mounted() {
+  mounted () {
     axios.get('/api/user', {
       headers: {
         Authorization: `Bearer ${this.$store.getters['auth/token']}`

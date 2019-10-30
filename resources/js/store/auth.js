@@ -21,15 +21,15 @@ const mutations = {
 }
 
 const actions = {
-  setToken (context, token) {
-    context.commit('login', token)
+  async setToken (context, token) {
+    await context.commit('login', token)
   },
   async login (context, data) {
     const response = await axios.post('/api/login', data).catch(err => err.response)
     if (response.status === 401 || response.status === 500) {
       return response
     }
-    context.commit('login', response.data.access_token)
+    await context.commit('login', response.data.access_token)
   },
 
   async logout (context, token) {
@@ -38,7 +38,7 @@ const actions = {
         Authorization: `Bearer ${token}`
       }
     })
-    context.commit('logout')
+    await context.commit('logout')
   }
 }
 

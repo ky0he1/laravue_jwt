@@ -67,6 +67,12 @@ export default {
     }
   },
 
+  mounted () {
+    if (this.$store.getters['auth/check']) {
+      this.$router.push('/user')
+    }
+  },
+
   methods: {
     errorReset () {
       Object.keys(this.error).forEach(key => {
@@ -76,12 +82,12 @@ export default {
       })
     },
 
-    async register() {
+    register() {
       this.errorReset()
       if (this.registerForm.name && this.registerForm.email &&
         this.registerForm.password && this.registerForm.password_confirmation) {
           if (this.registerForm.password === this.registerForm.password_confirmation) {
-            await axios.post('api/register', this.registerForm)
+            axios.post('api/register', this.registerForm)
               .then(res => {
                 this.$store.dispatch('auth/setToken', res.data.access_token)
                 this.$router.push('/user')
@@ -108,14 +114,14 @@ export default {
         }
     },
 
-    async login() {
+    login() {
       this.errorReset()
       if (this.loginForm.email && this.loginForm.password) {
-        const response = await this.$store.dispatch('auth/login', this.loginForm)
+        const response = this.$store.dispatch('auth/login', this.loginForm)
         if (response.status === 401) {
           this.error.login.auth = "メールアドレスかパスワードが間違っています。"
         }
-        await this.$router.push('/user')
+        this.$router.push('/user')
       } else {
         if (this.loginForm.email === '') {
           this.error.login.email = "メールアドレスを入力してください。"
